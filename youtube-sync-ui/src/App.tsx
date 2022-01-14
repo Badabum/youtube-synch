@@ -24,7 +24,7 @@ function App() {
     console.log(JSON.stringify(response))
   }
   useEffect(() => {
-    axios.post<User>('http://localhost:3001', {
+    axios.post<User>('http://localhost:3001/users', {
       authorizationCode: token
     }).then(user => console.log(user))
   }, [profile]);
@@ -48,6 +48,7 @@ function App() {
           onSuccess={successAuth}
           accessType='offline'
           responseType='code'
+          prompt={'consent'}
           onFailure={failedAuth}
           cookiePolicy='single_host_origin'
           scope='https://www.googleapis.com/auth/youtube.readonly'/>

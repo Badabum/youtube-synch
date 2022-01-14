@@ -1,0 +1,12 @@
+{
+  "name": "@youtube-sync/youtube-client",
+  "version": "1.0.0",
+  "description": "building blocks to interact with youtube data api",
+  "types": "index.ts",
+  "license": "MIT",
+  "dependencies": {
+    "@googleapis/youtube": "^2.0.0",
+    "@youtube-sync/domain": "../domain",
+    "google-auth-library": "^7.11.0"
+  }
+}

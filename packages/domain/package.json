@@ -1,0 +1,7 @@
+{
+  "name": "@youtube-sync/domain",
+  "version": "1.0.0",
+  "description": "domain entities used across services",
+  "types": "index.ts",
+  "license": "MIT"
+}
