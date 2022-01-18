@@ -5,24 +5,22 @@ import {config, DynamoDB} from "aws-sdk";
 import {OAuth2Client} from "google-auth-library/build/src/auth/oauth2client";
 import {DocumentClient} from "aws-sdk/lib/dynamodb/document_client";
 import {randomUUID} from "crypto";
-
+import {UserEntity, dynamoose, UserDocument} from '@youtube-sync/database'
+import {ConfigService} from "@nestjs/config";
 @Injectable()
 export class UsersService {
     private _client: OAuth2Client
-    private _documents : DocumentClient
-    constructor() {
-        config.update({region:'eu-west-1'});
+    constructor(private configService:ConfigService) {
         this._client = new google.auth.OAuth2({
-            clientId:'79131856482-fo4akvhmeokn24dvfo83v61g03c6k7o0.apps.googleusercontent.com',
-            clientSecret:'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',
-            redirectUri:"http://localhost:3000"
+            clientId: configService.get<string>('YOUTUBE_CLIENT_ID'),
+            clientSecret: configService.get<string>('YOUTUBE_CLIENT_SECRET'),
+            redirectUri: configService.get<string>('YOUTUBE_REDIRECT_URI')
         })
-        this._documents = new DynamoDB.DocumentClient();
     }
     async createFromCode(code: string) : Promise<User>{
         const tokenResponse = await this._client.getToken(code);
         const tokenInfo = await this._client.getTokenInfo(tokenResponse.tokens.access_token);
-        return {
+        const user: User = {
             id: tokenInfo.sub,
             avatarUrl:'',
             accessToken: tokenResponse.tokens.access_token,
@@ -31,25 +29,9 @@ export class UsersService {
             googleId: tokenInfo.sub,
             youtubeUsername: tokenInfo.email
         }
+        return await UserEntity.update({...user, partition: 'users'});
     }
     async get(id:string) : Promise<User>{
-        const response = await this._documents.get({
-            TableName:'users',
-            Key: {
-                partition: 'users',
-                id: id
-            }
-        }).promise();
-        return response.Item as User
-    }
-
-    private async save(user: User){
-        const response = await this._documents.put({
-            TableName:'users',
-            Item: {
-                ...user,
-                partition:'users'
-            }
-        }).promise()
+       return await UserEntity.get({partition:'users', id:id})
     }
 }

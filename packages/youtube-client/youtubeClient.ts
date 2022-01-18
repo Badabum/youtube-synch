@@ -27,17 +27,20 @@ export class YoutubeClient{
             userAccessToken: user.accessToken,
             userRefreshToken: user.refreshToken,
             thumbnails: {
-                small: item.snippet.thumbnails.default.url,
-                medium: item.snippet.thumbnails.medium.url,
-                large: item.snippet.thumbnails.high.url
+                default: item.snippet.thumbnails?.default?.url,
+                medium: item.snippet.thumbnails?.medium?.url,
+                high:  item.snippet.thumbnails?.high?.url,
+                maxRes:  item.snippet.thumbnails?.maxres?.url,
+                standard:  item.snippet.thumbnails?.standard?.url
             },
             statistics: {
-                viewCount: parseInt(item.statistics.viewCount),
-                subscriberCount: parseInt(item.statistics.subscriberCount),
-                videoCount: parseInt(item.statistics.videoCount),
-                commentCount: parseInt(item.statistics.commentCount)
+                viewCount: parseInt(item.statistics.viewCount ?? '0'),
+                subscriberCount: parseInt(item.statistics.subscriberCount ?? '0'),
+                videoCount: parseInt(item.statistics.videoCount ?? '0'),
+                commentCount: parseInt(item.statistics.commentCount ?? '0')
             },
-            frequency:0,
+            uploadsPlaylistId: item.contentDetails.relatedPlaylists.uploads,
+            frequency: 0,
             createdAt: Date.now()
         })
 
@@ -74,12 +77,13 @@ export class YoutubeClient{
             id: item.id,
             description: item.snippet.description,
             title: item.snippet.title,
+            channelId: item.snippet.channelId,
             thumbnails: {
-                high: item.snippet.thumbnails.high.url,
-                medium: item.snippet.thumbnails.medium.url,
-                maxRes: item.snippet.thumbnails.maxres.url,
-                standard: item.snippet.thumbnails.standard.url,
-                default: item.snippet.thumbnails.default.url,
+                high: item.snippet.thumbnails?.high?.url,
+                medium: item.snippet.thumbnails?.medium?.url,
+                maxRes: item.snippet.thumbnails?.maxres?.url,
+                standard: item.snippet.thumbnails?.standard?.url,
+                default: item.snippet.thumbnails?.default?.url,
             },
             playlistId: item.snippet.playlistId,
             url: `https://youtube.com/watch?v=${item.snippet.resourceId.videoId}`,

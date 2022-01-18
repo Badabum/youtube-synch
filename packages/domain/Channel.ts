@@ -1,3 +1,5 @@
+
+
 export interface Channel {
     id: string,
     title: string,
@@ -6,9 +8,11 @@ export interface Channel {
     userId: string,
     createdAt: number,
     thumbnails: {
-        small: string,
-        large: string,
-        medium: string
+        default: string,
+        medium: string,
+        high: string,
+        maxRes: string,
+        standard: string
     },
     statistics: {
         viewCount: number,

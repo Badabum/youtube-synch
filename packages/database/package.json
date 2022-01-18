@@ -1,0 +1,11 @@
+{
+  "name": "@youtube-sync/database",
+  "version": "1.0.0",
+  "types": "index.ts",
+  "license": "MIT",
+  "dependencies": {
+    "@youtube-sync/domain": "../domain",
+    "aws-sdk": "^2.1058.0",
+    "dynamoose": "^2.8.5"
+  }
+}
