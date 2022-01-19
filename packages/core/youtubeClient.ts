@@ -1,6 +1,7 @@
 import {youtube_v3} from "@googleapis/youtube";
 import {User, Channel, Video} from '@youtube-sync/domain'
 import {OAuth2Client} from 'google-auth-library'
+import * as ytdl from 'ytdl-core'
 import Schema$PlaylistItem = youtube_v3.Schema$PlaylistItem;
 export class YoutubeClient{
     private readonly _auth: OAuth2Client;
@@ -72,6 +73,9 @@ export class YoutubeClient{
         }while (continuation)
         return videos;
     }
+    downloadVideo(videoUrl: string){
+        return ytdl(videoUrl)
+    }
     private mapVideos(items: Schema$PlaylistItem[]){
         return items.map(item => <Video>{
             id: item.id,
@@ -88,7 +92,8 @@ export class YoutubeClient{
             playlistId: item.snippet.playlistId,
             url: `https://youtube.com/watch?v=${item.snippet.resourceId.videoId}`,
             resourceId: item.snippet.resourceId.videoId,
-            createdAt: Date.now()
+            createdAt: Date.now(),
+            state:'new'
         })
     }
 }

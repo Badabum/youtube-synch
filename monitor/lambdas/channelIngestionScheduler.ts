@@ -1,6 +1,5 @@
 import {EventRuleEvent} from "@pulumi/aws/cloudwatch";
-import {ChannelEntity, dynamoose} from '@youtube-sync/database'
-import {Events} from "@youtube-sync/domain";
+import {Events, ChannelEntity, dynamoose} from "@youtube-sync/core";
 import IngestChannel = Events.IngestChannel;
 import {SNS} from "aws-sdk";
 import {PublishBatchRequestEntry} from "aws-sdk/clients/sns";

@@ -1,7 +1,5 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as aws from "@pulumi/aws";
-import * as awsx from "@pulumi/awsx";
-import {EventRuleEvent} from "@pulumi/aws/cloudwatch";
 import {channelIngestionScheduler} from "./lambdas/channelIngestionScheduler";
 import {userCreatedHandler} from "./lambdas/userCreatedHandler";
 import {ingestChannelHandler} from "./lambdas/ingestChannelHandler";

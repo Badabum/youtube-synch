@@ -1,8 +1,5 @@
 
 export type VideoState = "new"
-    | "downloadStarted"
-    | "downloadFailed"
-    | "downloadSucceded"
     | "uploadToJoystreamStarted"
     | "uploadToJoystreamFailed"
     | "uploadToJoystreamSucceded"
@@ -22,5 +19,6 @@ export interface Video{
         standard: string
     },
     state: VideoState,
+    destinationUrl: string,
     createdAt: number
 }

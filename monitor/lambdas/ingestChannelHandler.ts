@@ -1,7 +1,5 @@
 import {TopicEvent} from "@pulumi/aws/sns";
-import {Channel} from '@youtube-sync/domain'
-import {YoutubeClient} from "@youtube-sync/youtube-client";
-import {VideoEntity} from '@youtube-sync/database'
+import {YoutubeClient, Channel, VideoEntity} from "@youtube-sync/core";
 import {SNS} from "aws-sdk";
 import {PublishBatchRequestEntry} from "aws-sdk/clients/sns";
 

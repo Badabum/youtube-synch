@@ -1,6 +1,6 @@
-import {User, Channel, Video, VideoState} from '@youtube-sync/domain'
 import * as dynamoose from 'dynamoose'
 import {Document} from 'dynamoose/dist/Document'
+import {User, Channel, Video, VideoState} from "./domain";
 
 const userSchema = new dynamoose.Schema({
     id: {
@@ -115,9 +115,7 @@ const videoSchema = new dynamoose.Schema({
     },
     state: {
         type: String,
-        enum: ["new","downloadStarted"
-        , "downloadFailed"
-        , "downloadSucceded"
+        enum: ["new"
         , "uploadToJoystreamStarted"
         , "uploadToJoystreamFailed"
         , "uploadToJoystreamSucceded"]
@@ -139,6 +137,7 @@ class VideoDocument extends Document implements Video{
     thumbnails: { default: string; medium: string; high: string; maxRes: string; standard: string };
     title: string;
     url: string;
+    destinationUrl: string;
 }
 const VideoEntity = dynamoose.model<VideoDocument>('video', videoSchema)
 export {VideoEntity, ChannelEntity, UserEntity, UserDocument, ChannelDocument, VideoDocument, dynamoose}

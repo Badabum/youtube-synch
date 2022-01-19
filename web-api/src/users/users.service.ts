@@ -1,11 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import {google} from "googleapis";
-import {User} from "@youtube-sync/domain";
-import {config, DynamoDB} from "aws-sdk";
+import {User} from "@youtube-sync/core";
 import {OAuth2Client} from "google-auth-library/build/src/auth/oauth2client";
-import {DocumentClient} from "aws-sdk/lib/dynamodb/document_client";
-import {randomUUID} from "crypto";
-import {UserEntity, dynamoose, UserDocument} from '@youtube-sync/database'
+import {UserEntity} from '@youtube-sync/core'
 import {ConfigService} from "@nestjs/config";
 @Injectable()
 export class UsersService {

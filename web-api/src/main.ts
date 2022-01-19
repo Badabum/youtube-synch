@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import {dynamoose} from '@youtube-sync/database'
+import {dynamoose} from '@youtube-sync/core/database'
 
 async function bootstrap() {
   dynamoose.aws.sdk.config.update({region:'eu-west-1'});

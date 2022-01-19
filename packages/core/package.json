@@ -1,0 +1,19 @@
+{
+  "name": "@youtube-sync/core",
+  "version": "1.0.0",
+  "description": "building blocks to interact with youtube data api",
+  "types": "index.ts",
+  "license": "MIT",
+  "dependencies": {
+    "@googleapis/youtube": "^2.0.0",
+    "@youtube-sync/database": "../database",
+    "@youtube-sync/domain": "../domain",
+    "aws-sdk": "^2.1059.0",
+    "google-auth-library": "^7.11.0",
+    "ytdl-core": "^4.10.0",
+    "dynamoose": "^2.8.5"
+  },
+  "devDependencies": {
+    "@types/node": "^16.0.0"
+  }
+}
