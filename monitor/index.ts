@@ -3,9 +3,10 @@ import * as aws from "@pulumi/aws";
 import {channelIngestionScheduler} from "./lambdas/channelIngestionScheduler";
 import {userCreatedHandler} from "./lambdas/userCreatedHandler";
 import {ingestChannelHandler} from "./lambdas/ingestChannelHandler";
-import {videoCreatedHandler} from "./lambdas/videoCreatedHandler";
-import {joystreamUploader} from "./lambdas/joystreamUploader";
+import {videoCreatedHandler, videoStateLogger} from "./lambdas/videoCreatedHandler";
 
+const AWS = require('aws-sdk');
+AWS.config.update({region:'eu-west-1'})
 // Create an AWS resource (S3 Bucket)
 const schedule = new aws.cloudwatch.EventRule("everyMinute",
     {
@@ -13,28 +14,17 @@ const schedule = new aws.cloudwatch.EventRule("everyMinute",
         name:'everyMinute',
         scheduleExpression:'cron(0/1 * * * ? *)'
     });
-
-const usersTable = new aws.dynamodb.Table('users',{
-    name:'users',
-    hashKey: 'partition',
-    rangeKey:'id',
-    streamEnabled: true,
-    readCapacity: 1,
-    writeCapacity: 1
-});
-schedule.onEvent('everyMinute', channelIngestionScheduler)
-
 // topics
-const userCreatedTopic = new aws.sns.Topic('userCreated')
-const ingestChannelTopic = new aws.sns.Topic('ingestChannel')
-const videoCreated = new aws.sns.Topic('videoCreated');
+const userCreatedTopic = new aws.sns.Topic('userEvents')
+const ingestChannelTopic = new aws.sns.Topic('channelEvents')
+const videoEvents = new aws.sns.Topic('videoEvents');
 
 // subscriptions
+schedule.onEvent('everyMinute', channelIngestionScheduler)
 userCreatedTopic.onEvent('userCreated', userCreatedHandler)
 ingestChannelTopic.onEvent('ingestChannel', ingestChannelHandler)
-videoCreated.onEvent('videoCreated', videoCreatedHandler)
+videoEvents.onEvent('videoCreated', videoCreatedHandler)
+videoEvents.onEvent('videoEvent', videoStateLogger)
 
 // joystream upload queue
 const uploadVideoQueue = new aws.sqs.Queue('uploadVideo')
-
-uploadVideoQueue.onEvent('uploadVideo', joystreamUploader);

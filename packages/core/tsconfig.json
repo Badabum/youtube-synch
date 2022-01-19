@@ -2,7 +2,8 @@
   "compilerOptions": {
     "target": "ES2020",
     "sourceMap": true,
-    "moduleResolution": "Node"
+    "moduleResolution": "Node",
+    "strict": true
   },
   "exclude": [
     "node_modules"

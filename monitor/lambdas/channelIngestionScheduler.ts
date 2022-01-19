@@ -1,14 +1,15 @@
 import {EventRuleEvent} from "@pulumi/aws/cloudwatch";
-import {Events, ChannelEntity, dynamoose} from "@youtube-sync/core";
+import {Events, dynamoose, Channel} from "@youtube-sync/core";
 import IngestChannel = Events.IngestChannel;
 import {SNS} from "aws-sdk";
 import {PublishBatchRequestEntry} from "aws-sdk/clients/sns";
 
-
-export function channelIngestionScheduler(event: EventRuleEvent){
+export async function channelIngestionScheduler(event: EventRuleEvent){
+    dynamoose.aws.sdk.config.update({region:'eu-west-1'});
+    const core = require('@youtube-sync/core')
     const matchingFrequencies = getMatchingFrequencies(getEventMinutes(event))
     // fetch all channels with frequency matching
-    const channels = await ChannelEntity.query(new dynamoose.Condition().filter('frequency').in(matchingFrequencies)).exec()
+    const channels: Channel[] = await core.ChannelEntity.query(new dynamoose.Condition().filter('frequency').in(matchingFrequencies)).exec()
 
     const events = channels.map(channel => <IngestChannel>{channel, timestamp: Date.now()})
     await new SNS()

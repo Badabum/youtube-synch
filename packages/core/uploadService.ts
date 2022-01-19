@@ -1,8 +1,8 @@
 import {YoutubeClient} from "./youtubeClient";
-import {Video} from "@youtube-sync/domain";
-import {VideoEntity} from "@youtube-sync/database";
 import * as stream from "stream";
 import {S3} from 'aws-sdk'
+import {Video} from "./domain/Video";
+import {VideoEntity} from "./database";
 
 export class UploadService{
     constructor(private youtubeClient : YoutubeClient) {
