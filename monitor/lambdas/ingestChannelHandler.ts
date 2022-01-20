@@ -1,27 +1,30 @@
 import {TopicEvent} from "@pulumi/aws/sns";
-import {Channel, dynamoose, Events, Video} from "@youtube-sync/core";
-import {SNS} from "aws-sdk";
-import {PublishBatchRequestEntry} from "aws-sdk/clients/sns";
+import {Channel, Events, Video} from "../core/domain";
 import VideoEvent = Events.VideoEvent;
+import {YoutubeClient} from "../core/youtubeClient";
+import {getVideoEntity} from "../core/database";
+import IngestChannel = Events.IngestChannel;
 
 export async function ingestChannelHandler(event: TopicEvent){
-    dynamoose.aws.sdk.config.update({region:'eu-west-1'});
+    const videoEntity = await getVideoEntity()
+    const{SNS} = await import("aws-sdk");
+    const youtubeClient = new YoutubeClient('79131856482-fo4akvhmeokn24dvfo83v61g03c6k7o0.apps.googleusercontent.com',
+        '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','http://localhost:3000');
+    const message : IngestChannel = JSON.parse(event.Records[0].Sns.Message);
+    console.log("Got message: ", message);
+    const videos:Video[] = await youtubeClient.getVideos(message.channel, 50);
+    console.log("Got videos", videos)
+    await videoEntity.batchPut(videos);
     const sns = new SNS();
-    const core = require('@youtube-sync/core')
-    const youtubeClient = new core.YoutubeClient('','','');
-    const message : Channel = JSON.parse(event.Records[0].Sns.Message);
-    const videos:Video[] = await youtubeClient.getVideos(message, 50);
-    await core.VideoEntity.batchPut(videos);
-    await sns.publishBatch({
-        PublishBatchRequestEntries: videos.map(video => <PublishBatchRequestEntry>{
-            Subject: 'videoCreated',
-            Message: JSON.stringify(<VideoEvent>{
-                channelId: video.channelId,
-                videoId: video.id,
-                state: 'new',
-                timestamp: Date.now()
-            })
+    const promises = videos.map(video => sns.publish({
+        Subject: 'videoCreated',
+        Message: JSON.stringify(<VideoEvent>{
+            channelId: video.channelId,
+            videoId: video.id,
+            state: 'new',
+            timestamp: Date.now()
         }),
-        TopicArn: 'arn:aws:sns:eu-west-1:<user-id>:videoCreated'
-    }).promise()
+        TopicArn: 'arn:aws:sns:eu-west-1:226498669520:videoEvents-137f223'
+    }).promise());
+    await Promise.all(promises)
 }

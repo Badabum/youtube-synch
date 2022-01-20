@@ -42,7 +42,14 @@ const channelSchema = new dynamoose.Schema({
         rangeKey: true,
     },
     title: String,
-    frequency: Number,
+    frequency: {
+        type: Number,
+        index:{
+            global: true,
+            rangeKey: 'id',
+            name: "frequency-id-index"
+        }
+    },
     description: String,
     userId: {
         hashKey: true,

@@ -1,7 +1,5 @@
 import {Body, Controller, Get, Param, Post, Query} from '@nestjs/common';
-import {Channel, User} from "@youtube-sync/domain";
-import {google} from 'googleapis'
-import {config, Config, DynamoDB} from 'aws-sdk'
+import {User} from "@youtube-sync/core";
 import {UsersService} from "./users.service";
 import {ChannelsService} from "../channels/channels.service";
 

@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import {ConfigService} from "@nestjs/config";
-import {Channel, Video} from "@youtube-sync/domain";
-import {YoutubeClient} from '@youtube-sync/youtube-client'
-import {VideoEntity} from '@youtube-sync/database'
+import {Channel, Video, YoutubeClient, VideoEntity} from "@youtube-sync/core";
 
 @Injectable()
 export class VideosService {
@@ -18,5 +16,8 @@ export class VideosService {
         const videos = await this.youtube.getAllVideos(channel);
         await VideoEntity.batchPut(videos);
         return videos;
+    }
+    async getVideos(channel: Channel):Promise<Video[]>{
+        return await VideoEntity.query('channelId').eq(channel.id).exec();
     }
 }

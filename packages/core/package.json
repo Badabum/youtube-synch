@@ -4,12 +4,13 @@
   "description": "building blocks to interact with youtube data api",
   "types": "index.ts",
   "license": "MIT",
+  "private": true,
   "dependencies": {
     "@googleapis/youtube": "^2.0.0",
     "aws-sdk": "^2.1059.0",
+    "dynamoose": "^2.8.5",
     "google-auth-library": "^7.11.0",
-    "ytdl-core": "^4.10.0",
-    "dynamoose": "^2.8.5"
+    "ytdl-core": "^4.10.0"
   },
   "devDependencies": {
     "@types/node": "^16.0.0"

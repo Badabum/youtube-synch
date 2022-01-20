@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {Channel, User} from '@youtube-sync/domain'
-import {ChannelEntity, dynamoose} from '@youtube-sync/database'
-import {YoutubeClient} from '@youtube-sync/youtube-client'
+import {ChannelEntity,Channel, User, YoutubeClient} from '@youtube-sync/core'
 import {ConfigService} from "@nestjs/config";
 
 @Injectable()
@@ -26,6 +24,9 @@ export class ChannelsService {
     async getAll(userId: string):Promise<Channel[]>{
         const channels = await ChannelEntity.query('userId').eq(userId).exec();
         return channels;
+    }
+    async getAllWithFrequency(frequency: number):Promise<Channel[]>{
+        return await ChannelEntity.scan('frequency').in([frequency]).exec();
     }
     async update(channel: Channel):Promise<Channel>{
         const updated = await ChannelEntity.update(channel);

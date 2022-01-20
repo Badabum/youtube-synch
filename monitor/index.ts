@@ -4,9 +4,6 @@ import {channelIngestionScheduler} from "./lambdas/channelIngestionScheduler";
 import {userCreatedHandler} from "./lambdas/userCreatedHandler";
 import {ingestChannelHandler} from "./lambdas/ingestChannelHandler";
 import {videoCreatedHandler, videoStateLogger} from "./lambdas/videoCreatedHandler";
-
-const AWS = require('aws-sdk');
-AWS.config.update({region:'eu-west-1'})
 // Create an AWS resource (S3 Bucket)
 const schedule = new aws.cloudwatch.EventRule("everyMinute",
     {
@@ -18,7 +15,6 @@ const schedule = new aws.cloudwatch.EventRule("everyMinute",
 const userCreatedTopic = new aws.sns.Topic('userEvents')
 const ingestChannelTopic = new aws.sns.Topic('channelEvents')
 const videoEvents = new aws.sns.Topic('videoEvents');
-
 // subscriptions
 schedule.onEvent('everyMinute', channelIngestionScheduler)
 userCreatedTopic.onEvent('userCreated', userCreatedHandler)
